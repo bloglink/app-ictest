@@ -2,7 +2,7 @@
 
 AppScreen::AppScreen(QObject *parent) : QObject(parent)
 {
-
+    openfd();
 }
 
 void AppScreen::openfd()

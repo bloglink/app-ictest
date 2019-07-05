@@ -102,7 +102,7 @@ void AppWindow::initButton()
 
     blayout->addWidget(new QLabel(tr("刷新时间(s)"), this));
     time = new QLineEdit(this);
-//    time->setText("60");
+    //    time->setText("60");
     blayout->addWidget(time);
     connect(time, SIGNAL(editingFinished()), this, SLOT(updateTime()));
 
@@ -135,6 +135,7 @@ void AppWindow::initSettings()
     QSettings *set = new QSettings("config.ini", QSettings::IniFormat);
     QString str = set->value("freq", "60").toString();
     time->setText(str);
+    wether->sendFreq(time->text().toInt());
 }
 
 void AppWindow::saveSettings()
@@ -204,14 +205,14 @@ void AppWindow::wait(int ms)
 
 void AppWindow::play()
 {
-    beep->show();
-    beep->resize(50, 50);
-    movie->start();
-    for (int i=0; i < 100; i++) {
-        beep->move(i*10, 175);
-        wait(100);
-    }
-    beep->hide();
+//    beep->show();
+//    beep->resize(50, 50);
+//    movie->start();
+//    for (int i=0; i < 100; i++) {
+//        beep->move(i*12, 175);
+//        wait(100);
+//    }
+//    beep->hide();
 }
 
 void AppWindow::showEvent(QShowEvent *)

@@ -8,6 +8,7 @@ AppWether::AppWether(QWidget *parent) : QWidget(parent)
 void AppWether::sendFreq(int freq)
 {
     tt = freq * 1000;
+    QTimer::singleShot(20, this, SLOT(updateWether()));
 }
 
 void AppWether::initUI()
@@ -48,6 +49,10 @@ void AppWether::initWether()
     connect(timer, SIGNAL(timeout()), this, SLOT(updateWether()));
     tt = 60000;
     timer->start(tt);
+    beep = new QLabel(this);
+    movie = new QMovie(":/04.gif");
+    beep->setMovie(movie);
+    beep->hide();
 }
 
 void AppWether::initNetwork()
@@ -88,6 +93,18 @@ void AppWether::wait(int ms)
         QCoreApplication::processEvents();
 }
 
+void AppWether::play()
+{
+    beep->show();
+    beep->resize(50, 50);
+    movie->start();
+    for (int i=0; i < 100; i++) {
+        beep->move(i*10, 175);
+        wait(100);
+    }
+    beep->hide();
+}
+
 void AppWether::replayWether(QNetworkReply *reply)
 {
     if(reply->error() == QNetworkReply::NoError) {
@@ -102,6 +119,7 @@ void AppWether::replayWether(QNetworkReply *reply)
         wethershow.at(5)->setText(today.value("fengxiang").toString());
         wethershow.at(7)->setText(data.value("wendu").toString());
         wethershow.at(9)->setText(today.value("type").toString());
+        play();
     }
 }
 
@@ -123,7 +141,7 @@ void AppWether::replayIcblog(QNetworkReply *reply)
                         QStringList tt = str.split("\"");
                         int x = tt.indexOf(" title=");
                         QString dat = "<a style='font-size:19px;color:cyan;' href=\"0\">";
-                        dat += tr("%1&nbsp;&nbsp;").arg(k, 2, 10, QChar('0'));
+                        dat += tr("%1&nbsp;&nbsp;").arg(k+1, 2, 10, QChar('0'));
                         dat += tt.at(x+1);
                         techo->insertHtml(dat + "<br><br/>");
                         k++;
@@ -142,7 +160,7 @@ void AppWether::replayIcblog(QNetworkReply *reply)
                         QStringList tt = str.split("\"");
                         int x = tt.indexOf(" title=");
                         QString dat = "<a style='font-size:19px;color:cyan;' href=\"0\">";
-                        dat += tr("%1&nbsp;&nbsp;").arg(g, 2, 10, QChar('0'));
+                        dat += tr("%1&nbsp;&nbsp;").arg(g+1, 2, 10, QChar('0'));
                         dat += tt.at(x+1);
                         techo->insertHtml(dat + "<br><br/>");
                         g++;

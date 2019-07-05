@@ -31,14 +31,15 @@ signals:
 
 public slots:
     void sendFreq(int freq);
+    void updateWether();
 private slots:
     void initUI();
     void initLayout();
     void initWether();
     void initNetwork();
-    void updateWether();
     virtual void showEvent(QShowEvent *e);
     void wait(int ms);
+    void play();
 protected slots:
     void replayWether(QNetworkReply *reply);
     void replayIcblog(QNetworkReply *reply);
@@ -52,6 +53,8 @@ private:
     AppScreen pwm;
     QTimer *timer;
     int tt;
+    QLabel *beep;
+    QMovie *movie;
 };
 
 #endif // APPWETHER_H
